@@ -1,0 +1,36 @@
+name: Build Bundle
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      - name: Cache Node.js modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-node-
+            ${{ runner.OS }}-
+      - run: npm ci
+      - run: node_modules/.bin/gulp lint
+      - run: node_modules/.bin/gulp bundle
+      - run: echo '${{ secrets.NEXUS_PASSWORD }}'
+      - name: Publish Bundle to Nexus
+        run: >-
+          /usr/bin/curl
+          --fail
+          -u 'github:${{ secrets.NEXUS_PASSWORD }}'
+          --upload-file ./build/ui-bundle.zip
+          "https://repo.stackable.tech/repository/misc/ui-bundle.zip"
