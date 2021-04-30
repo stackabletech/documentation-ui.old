@@ -50,6 +50,7 @@ module.exports = (src, dest, preview) => () => {
     ]),
     postcssVar({ preserve: preview }),
     preview ? postcssCalc : () => {},
+    require('tailwindcss'),
     autoprefixer,
     preview
       ? () => {}
