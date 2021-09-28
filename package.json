@@ -50,7 +50,7 @@
     "require-from-string": "^2",
     "stylelint": "^13",
     "stylelint-config-standard": "^22",
-    "tailwindcss": "^2",
+     "tailwindcss": "^2.2.16",
     "typeface-roboto": "0.0.75",
     "typeface-roboto-mono": "0.0.75",
     "vinyl-buffer": "^1",
